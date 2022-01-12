@@ -29,13 +29,15 @@ class OrdersController < ApplicationController
   end
   helper_method :order_subtotal_cents
 
+  
   private
-
+  
+  
   def empty_cart!
     # empty hash means no products in cart :)
     update_cart({})
   end
-
+  
   def perform_stripe_charge
     Stripe::Charge.create(
       source:      params[:stripeToken],
@@ -44,14 +46,14 @@ class OrdersController < ApplicationController
       currency:    'cad'
     )
   end
-
+  
   def create_order(stripe_charge)
     order = Order.new(
       email: params[:stripeEmail],
       total_cents: cart_subtotal_cents,
       stripe_charge_id: stripe_charge.id, # returned by stripe
     )
-
+    
     enhanced_cart.each do |entry|
       product = entry[:product]
       quantity = entry[:quantity]
@@ -65,5 +67,10 @@ class OrdersController < ApplicationController
     order.save!
     order
   end
+  
+  def get_email
+    @order.map {|e| e[:email]}
+  end
+  helper_method :get_email
 
 end
