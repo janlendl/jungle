@@ -22,7 +22,12 @@ class OrdersController < ApplicationController
   def enhanced_order
     @enhanced_order ||= @order.line_items.map{|line_item| {quantity: line_item.quantity, product: Product.find_by(id:line_item.product_id)}}
   end
-  helper_method: enhanced_order
+  helper_method :enhanced_order
+
+  def cart_subtotal_cents
+    enhanced_order.map {|entry| entry[:product].price_cents * entry[:quantity]}.sum
+  end
+  helper_method :cart_subtotal_cents
 
   private
 
