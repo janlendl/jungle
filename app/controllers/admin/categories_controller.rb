@@ -3,7 +3,8 @@ class Admin::CategoriesController < ApplicationController
   before_filter :authenticate
 
   def index
-    @categories = Category.order(id :desc).all
+    # @categories = Category.order(name :desc).all
+    @categories = Category.all
   end
 
   def new
@@ -13,8 +14,8 @@ class Admin::CategoriesController < ApplicationController
   def create
     @category = Category.new(category_params)
 
-    if @product.save
-      redirect_to [:admin, :category], notice: 'Category created!'
+    if @category.save
+      redirect_to [:admin, :categories], notice: 'Category created!'
     else
       render :new
     end
