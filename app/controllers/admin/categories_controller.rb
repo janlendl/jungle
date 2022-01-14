@@ -3,7 +3,6 @@ class Admin::CategoriesController < ApplicationController
   before_filter :authenticate
 
   def index
-    # @categories = Category.order(name :desc).all
     @categories = Category.all
   end
 
