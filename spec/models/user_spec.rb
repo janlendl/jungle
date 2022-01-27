@@ -38,12 +38,14 @@ RSpec.describe User, type: :model do
       expect { @user.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
-    # it 'should be invalid if email already exists' do
-    #   user.email = "this@myemail.com"
+    it 'should be invalid if email already exists and ignores case sensitivity' do
+      # creates the first user to trigger the check when a 2nd user is created with the same email
+      @user = User.new(name: "Mr. Mime", email: "this@myemail.com", password: "123456", password_confirmation: "123456")
+      @user.save!
 
-    #   @user = User.new(name: "Mr. Anderson", email: "this@myemail.com", password: "123456", password_confirmation: "123456")
-    #   expect(@user).to be_valid
-    # end
+      @user = User.new(name: "Mr. Anderson", email: "THIS@MYEMAIL.COM", password: "123456", password_confirmation: "123456")
+      expect(@user).to_not be_valid
+    end
 
   end
 
