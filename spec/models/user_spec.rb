@@ -50,13 +50,31 @@ RSpec.describe User, type: :model do
   end
 
   describe '.authenticate_with_credentials' do
-    it 'should return a truthy value if user login is correct' do
+    before do
       @user = User.new(name: "Mr. Mime", email: "jan@mailme.com", password: "123456", password_confirmation: "123456")
+    end
+
+    it 'should return a truthy value if user login is correct' do
       @user.save!
 
-      @new_session = @user.authenticate_with_credentials("jan@mailme.com", "123456")
+      @new_session = User.authenticate_with_credentials("jan@mailme.com", "123456")
       expect(@new_session).to be_truthy
     end
+
+    it 'should return a truthy value for email with whitespace' do
+      @user.save!
+
+      @new_session = User.authenticate_with_credentials("    jan@mailme.com    ", "123456")
+      expect(@new_session).to be_truthy
+    end
+
+    it 'should return a truthy value for email with wrong case syntax' do
+      @user.save!
+
+      @new_session = User.authenticate_with_credentials("JAN@mailme.COM", "123456")
+      expect(@new_session).to be_truthy
+    end
+
   end
 
 end
