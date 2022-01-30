@@ -25,7 +25,7 @@ RSpec.feature "Visitor goes to the product detail page", type: :feature, js: tru
 
     #DEBUG / VERIFY WITH SLEEP TIMER
     sleep(2)
-    save_screenshot
+    save_screenshot 'test_product_details.png'
 
     expect(page).to have_css 'article.product-detail'
   end
